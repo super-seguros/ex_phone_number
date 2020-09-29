@@ -18933,7 +18933,7 @@
       </voip>
     </territory>
 
-    <!-- Mexico -->
+    <!-- Mexico (MX) -->
     <!-- http://www.itu.int/oth/T020200008A/en -->
     <!-- http://en.wikipedia.org/wiki/%2B52 -->
     <!-- http://en.wikipedia.org/wiki/Premium-rate_telephone_number#Mexico -->
@@ -18944,12 +18944,16 @@
          national format (leading 044/045), will be parsed into the same form. -->
     <territory id="MX" countryCode="52" preferredInternationalPrefix="00"
                internationalPrefix="0[09]" nationalPrefix="01"
-               nationalPrefixForParsing="0[12]|04[45]([2-9]\d{9})$"
-               nationalPrefixTransformRule="1$1" mobileNumberPortableRegion="true">
+               nationalPrefixForParsing="0(?:[12]|4[45])|1" mobileNumberPortableRegion="true">
       <availableFormats>
+        <!-- 5-digit shortcodes (very rare). -->
+        <numberFormat pattern="(\d{5})">
+          <leadingDigits>53</leadingDigits>
+          <format>$1</format>
+          <intlFormat>NA</intlFormat>
+        </numberFormat>
         <!-- Fixed line (2-digit area codes). -->
-        <numberFormat pattern="(\d{2})(\d{4})(\d{4})" nationalPrefixFormattingRule="$NP $FG"
-                      nationalPrefixOptionalWhenFormatting="true">
+        <numberFormat pattern="(\d{2})(\d{4})(\d{4})" nationalPrefixOptionalWhenFormatting="true">
           <leadingDigits>
             33|
             5[56]|
@@ -18958,13 +18962,13 @@
           <format>$1 $2 $3</format>
         </numberFormat>
         <!-- Fixed line (3-digit area codes) and other non-mobile numbers. -->
-        <numberFormat pattern="(\d{3})(\d{3})(\d{4})" nationalPrefixFormattingRule="$NP $FG"
-                      nationalPrefixOptionalWhenFormatting="true">
+        <numberFormat pattern="(\d{3})(\d{3})(\d{4})" nationalPrefixOptionalWhenFormatting="true">
           <leadingDigits>[2-9]</leadingDigits>
           <format>$1 $2 $3</format>
         </numberFormat>
-        <!-- Mobile version of fixed line 2-digit area codes (prepends mobile token). -->
-        <numberFormat pattern="(\d)(\d{2})(\d{4})(\d{4})" nationalPrefixFormattingRule="044 $FG">
+        <!-- Mobile version of fixed line 2-digit area codes and removing former mobile token 1. -->
+        <numberFormat pattern="(\d)(\d{2})(\d{4})(\d{4})"
+                      nationalPrefixOptionalWhenFormatting="true">
           <leadingDigits>
             1(?:
               33|
@@ -18973,28 +18977,31 @@
             )
           </leadingDigits>
           <format>$2 $3 $4</format>
-          <intlFormat>$1 $2 $3 $4</intlFormat>
         </numberFormat>
-        <!-- Mobile version of fixed line 3-digit area codes (prepends mobile token). -->
-        <numberFormat pattern="(\d)(\d{3})(\d{3})(\d{4})" nationalPrefixFormattingRule="044 $FG">
+        <!-- Mobile version of fixed line 3-digit area codes and removing former mobile token 1. -->
+        <numberFormat pattern="(\d)(\d{3})(\d{3})(\d{4})"
+                      nationalPrefixOptionalWhenFormatting="true">
           <leadingDigits>1</leadingDigits>
           <format>$2 $3 $4</format>
-          <intlFormat>$1 $2 $3 $4</intlFormat>
         </numberFormat>
       </availableFormats>
       <generalDesc>
         <nationalNumberPattern>
           (?:
-            1\d|
-            [2-9]
-          )\d{9}
+            1(?:
+              [01467]\d|
+              [2359][1-9]|
+              8[1-79]
+            )|
+            [2-9]\d
+          )\d{8}
         </nationalNumberPattern>
       </generalDesc>
       <!-- http://en.wikipedia.org/wiki/Area_codes_in_Mexico_by_code -->
       <!-- Also covering fixed satellite service numbers (prefixes: 200 and 201). -->
       <fixedLine>
         <possibleLengths national="10" localOnly="7,8"/>
-        <exampleNumber>2221234567</exampleNumber>
+        <exampleNumber>2001234567</exampleNumber>
         <nationalNumberPattern>
           (?:
             2(?:
@@ -19064,10 +19071,72 @@
       <!-- Fixed satellite service numbers are not included here, although many other prefixes from
            the fixedLine pattern are. -->
       <mobile>
-        <possibleLengths national="11"/>
+        <possibleLengths national="10,11" localOnly="7,8"/>
         <exampleNumber>12221234567</exampleNumber>
         <nationalNumberPattern>
-          1(?:
+          (?:
+            1(?:
+              2(?:
+                2[1-9]|
+                3[1-35-8]|
+                4[13-9]|
+                7[1-689]|
+                8[1-578]|
+                9[467]
+              )|
+              3(?:
+                1[1-79]|
+                [2458][1-9]|
+                3\d|
+                7[1-8]|
+                9[1-5]
+              )|
+              4(?:
+                1[1-57-9]|
+                [24-7][1-9]|
+                3[1-8]|
+                8[1-35-9]|
+                9[2-689]
+              )|
+              5(?:
+                [56]\d|
+                88|
+                9[1-79]
+              )|
+              6(?:
+                1[2-68]|
+                [2-4][1-9]|
+                5[1-3689]|
+                6[1-57-9]|
+                7[1-7]|
+                8[67]|
+                9[4-8]
+              )|
+              7(?:
+                [1-467][1-9]|
+                5[13-9]|
+                8[1-69]|
+                9[17]
+              )|
+              8(?:
+                1\d|
+                2[13-689]|
+                3[1-6]|
+                4[124-6]|
+                6[1246-9]|
+                7[1-378]|
+                9[12479]
+              )|
+              9(?:
+                1[346-9]|
+                2[1-4]|
+                3[2-46-8]|
+                5[1348]|
+                [69][1-9]|
+                7[12]|
+                8[1-8]
+              )
+            )|
             2(?:
               2[1-9]|
               3[1-35-8]|
